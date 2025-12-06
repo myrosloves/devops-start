@@ -26,7 +26,7 @@ jobs:
         context: .
         push: true
         tags: myroslove/my-website:latest # Заменить
-         - name: Deploy to Server (CD)
+    - name: Deploy to Server (CD)
       uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.SSH_HOST }}
