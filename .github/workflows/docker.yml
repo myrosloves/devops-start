@@ -6,7 +6,7 @@ on:
 
 jobs:
   build-and-push:
-    runs-on: ubuntu-latest # Выполнять на чистой машине Ubuntu
+    runs-on: self-hosted # Выполнять на M
     steps:
     - name: Checkout code # 1. Получить наш код из репозитория
       uses: actions/checkout@v4
@@ -26,23 +26,3 @@ jobs:
         context: .
         push: true
         tags: myroslove/my-website:latest # Заменить
-    - name: Deploy to Server (CD)
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        port: ${{ secrets.SSH_PORT }}
-        username: user        # Твой логин в Linux, если он другой - замени
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script: |
-          # 1. Загружаем свежий образ с Docker Hub
-          docker pull myroslove/my-website:latest
-
-          # 2. Удаляем старый контейнер (если он запущен)
-          docker rm -f my-website || true
-
-          # 3. Запускаем новый контейнер
-          docker run -d \
-            -p 8081:80 \
-            --name my-website \
-            --restart always \
-            myroslove/my-website:latest!
